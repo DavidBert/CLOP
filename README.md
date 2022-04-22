@@ -8,10 +8,17 @@ Official implementation for [CLOP: Local Feature Swapping for Generalization in 
 ## Examples with different values for $\alpha$
 ![](images/CLOP_exemple.png) 
 
+## Setup
+```bash
+conda create -n clop python=3.8
+conda activate clop
+pip install -r requirements.txt
+```
+
 ## Run supervised learning benchmarks:
 To run a full supervised learning benchmark:
 ```bash
-python benchmark.py --dataset [DATASET] --dataset_folder [FOLDER] --epochs[EPOCHS] --nb_runs[NBRUNS]
+python Supervised/benchmark.py --dataset [DATASET] --dataset_folder [FOLDER] --epochs[EPOCHS] --nb_runs[NBRUNS]
 ```
  with: 
 *  DATASET: one of ```mnist_usps, stl10, imagenette```
@@ -21,7 +28,7 @@ python benchmark.py --dataset [DATASET] --dataset_folder [FOLDER] --epochs[EPOCH
 
 Exemple:
 ```bash
-python benchmark.py --exp_name mnist_usps --dataset_folder data --epochs 30 --nb_runs 5
+python Supervised/benchmark.py --dataset mnist_usps --dataset_folder data --epochs 30 --nb_runs 5
 ```
 
 Imagenette2 dataset is available on [this repo](https://github.com/fastai/imagenette).
@@ -31,12 +38,9 @@ Imagenette2 dataset is available on [this repo](https://github.com/fastai/imagen
 
 
 ## Train an agent on procgen:
-To run an experiment on procgen:
+To train a PPO agent on Procgen:
 ```bash
-python train.py --exp_name [XP_NAME] --env_name [GAME]
-```
-Or with more parameters:
-```bash
+cd RL/
 python train.py --exp_name [XP_NAME] --env_name [GAME] --param_name [PARAM] --num_levels [NUM_LEVEL] --distribution_mode [MODE] --num_timesteps [TIMESTEPS] --start_level [START]
 ```
 *  XP_NAME: experiment name for logs
@@ -47,7 +51,7 @@ python train.py --exp_name [XP_NAME] --env_name [GAME] --param_name [PARAM] --nu
 * MODE: `easy` or `hard`
 * TIMESTEPS  umber of training steps
 
-To train a agent with CLOP add `--clop [alpha]` with $0 \leq \alpha \leq 1$.
+To train a PPO agent with CLOP add `--clop [alpha]` with $0 \leq \alpha \leq 1$.
 
 Exemple:
 ```bash
