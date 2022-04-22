@@ -1,6 +1,5 @@
 import os
 import argparse
-from sklearn import datasets
 import torch
 from tqdm import tqdm
 import pandas as pd

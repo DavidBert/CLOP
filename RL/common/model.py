@@ -1,6 +1,5 @@
 from .misc_util import orthogonal_init, xavier_uniform_init
 import torch.nn as nn
-import torch
 from .layer import CLOPLayer
 import torch.nn.functional as F
 from torch.distributions import Categorical
