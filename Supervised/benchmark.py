@@ -55,7 +55,7 @@ if __name__ == "__main__":
 
     if dataset == "stl10":
         trainloader, testloader = get_stl10_loaders(
-            root_path="/data/david.bertoin/data",
+            root_path=dataset_folder,
             batch_size=64,
             shuffle=True,
             num_workers=8,
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     elif dataset == "imagenette":
         trainloader, testloader = get_imagenet_loaders(
-            root_path="/data/david.bertoin/data/imagenette2",
+            root_path=dataset_folder,
             batch_size=64,
             shuffle=True,
             num_workers=8,
