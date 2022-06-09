@@ -31,13 +31,13 @@ class CLOPLayer(nn.Module):
             r = np.random.choice([0, 1, 2, 3, 4], p=p)
             if r != 0:
                 if r == 1:
-                    idx_prime = ((i + 1) % nb_raw, j)
+                    idx_prime = (min((i + 1), nb_raw-1) % nb_raw, j)
                 if r == 2:
-                    idx_prime = ((i - 1) % nb_raw, j)
+                    idx_prime = (max((i - 1), 0) % nb_raw, j)
                 if r == 3:
-                    idx_prime = (i, (j + 1) % nb_col)
+                    idx_prime = (i, min((j + 1), nb_col-1) % nb_col)
                 if r == 4:
-                    idx_prime = (i, (j - 1) % nb_col)
+                    idx_prime = (i, max((j - 1), 0) % nb_col)
                 tmp = int(indexes[i,j])
                 indexes[i, j] = indexes[idx_prime]
                 indexes[idx_prime] = tmp
