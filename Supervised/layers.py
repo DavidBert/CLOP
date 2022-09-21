@@ -2,7 +2,9 @@ import numpy as np
 import torch.nn as nn
 import math 
 import torch
-      
+
+""" 
+Actually a modified implementation of the CLOP layer (below) provides better performances
 class CLOPLayer(nn.Module):
     def __init__(self, p=0.3):
         super().__init__()
@@ -48,3 +50,47 @@ class CLOPLayer(nn.Module):
             shuffled = self._shuffle(x)
             return shuffled
         return x 
+"""
+    
+class CLOPLayer(nn.Module):
+    def __init__(self, p=0.9):
+        super().__init__()
+        self.p = p
+
+    def _shuffle(self, x):
+        batch_size = x.shape[0]
+        nb_channels = x.shape[1]
+        flat = x.flatten(start_dim=2, end_dim=-1)
+        idx = self._index_permute(x[0, 0]).to(x.device)
+        idx = idx.repeat(batch_size, nb_channels, 1)
+        res = torch.gather(flat, 2, idx)
+        return res.view_as(x)
+
+    def _index_permute(self, x):
+        n_element = x.nelement()
+        dim = int(math.sqrt(n_element))
+        permuted_indexes = torch.arange(0, n_element, dtype=int)
+        p = (1 - self.p / 2, self.p / 8, self.p / 8, self.p / 8, self.p / 8)
+        for i in range(-n_element + 1, n_element):
+            i = abs(i)
+            r = np.random.choice([0, 1, 2, 3, 4], p=p)
+            if r != 0:
+                if r == 1:
+                    idx = i + 1
+                if r == 2:
+                    idx = i - 1
+                if r == 3:
+                    idx = i + dim
+                if r == 4:
+                    idx = i - dim
+                if (idx > 0) & (idx < n_element):
+                    tmp = int(permuted_indexes[i])
+                    permuted_indexes[i] = int(permuted_indexes[idx])
+                    permuted_indexes[idx] = tmp
+        return permuted_indexes
+
+    def forward(self, x):
+        if self.training:
+            shuffled = self._shuffle(x)
+            return shuffled
+        return x
